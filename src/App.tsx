@@ -104,7 +104,7 @@ function App() {
           return contract.methods
             .mint(data.bigGlyph, data.lilGlyph, data.proof)
             .send({
-              from: address,
+              from: pxgLib?.accounts?.[0],
               maxFeePerGas: (max * 1.4).toFixed(0),
               maxPriorityFeePerGas: (Number(tip) * 1.5).toFixed(0),
             });
@@ -115,7 +115,7 @@ function App() {
       updateError(e.message);
     }
   }
-  console.log(nfts);
+
   return (
     <>
       <div style={{ maxWidth: "500px" }}>
@@ -221,9 +221,9 @@ function App() {
       <div className="item nftWrap">
         {nfts && nfts.length > 0 && (
           <>
-            {nfts.map((nft: any) => {
+            {nfts.map((nft: any, i: number) => {
               return (
-                <div className="nft">
+                <div key={i} className="nft">
                   <img src={nft.image_preview_url} />
                 </div>
               );
