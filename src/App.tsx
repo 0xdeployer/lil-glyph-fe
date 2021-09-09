@@ -1,7 +1,7 @@
 /* eslint-disable eqeqeq */
 import React from "react";
 import "./App.css";
-import { pxgLib } from "./pxgLib";
+import { pxgLib, web3 } from "./pxgLib";
 import tokens from "./tokens.json";
 import abi from "./abi.json";
 
@@ -25,7 +25,8 @@ function App() {
     updateError("");
 
     if (!pxgLib.web3) return;
-    const contract = new pxgLib.web3.eth.Contract(
+
+    const contract = new web3.eth.Contract(
       // @ts-ignore
       abi,
       "0x8B7F316B8B771d7Cb82192EF189cE5E3c29af532"
@@ -49,11 +50,27 @@ function App() {
     console.log(
       "Here is the data that will be submitted with the mint transaction. The leaf property is not used."
     );
+    console.log(data);
 
     try {
-      await contract.methods
-        .mint(data.bigGlyph, data.lilGlyph, data.proof)
-        .send({ from: address });
+      // await contract.methods
+      //   .mint(data.bigGlyph, data.lilGlyph, data.proof)
+      //   .send({
+      //     from: address,
+      //   });
+      await web3.eth.getMaxPriorityFeePerGas().then((tip: any) => {
+        web3.eth.getBlock("pending").then((block: any) => {
+          const baseFee = Number(block.baseFeePerGas);
+          const max = Number(tip) + baseFee - 1; // less than the sum
+          return contract.methods
+            .mint(data.bigGlyph, data.lilGlyph, data.proof)
+            .send({
+              from: address,
+              maxFeePerGas: (max * 1.4).toFixed(0),
+              maxPriorityFeePerGas: (Number(tip) * 1.5).toFixed(0),
+            });
+        });
+      });
     } catch (e) {
       // @ts-ignore
       updateError(e.message);
