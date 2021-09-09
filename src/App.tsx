@@ -160,7 +160,7 @@ function App() {
           smart contract uses a Base64 library (taken from Loot) to Base64
           encode the JSON and the SVG within the standard tokenURI function.
           This means that Lil' Glyphs will never need to rely on anything other
-          than the smart contract itself. All data is stored and accessible
+          than the smart contract itself. All data is stored on and accessible
           directly from the smart contract.
         </p>
         <p>
