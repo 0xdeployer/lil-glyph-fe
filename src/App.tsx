@@ -1,5 +1,5 @@
+/* eslint-disable eqeqeq */
 import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
 import { pxgLib } from "./pxgLib";
 import tokens from "./tokens.json";
